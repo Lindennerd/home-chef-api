@@ -1,0 +1,29 @@
+{
+  "id": "6cbd5b0e-7f1f-4b0e-8c1e-1c5b6e1b7b2e",
+  "user_name": "John Doe",
+  "user_email": "john.doe@gmail.com",
+  "user_phone": "1234567890",
+  "user_address": {
+    "address": "Rua dos Bobos, 0",
+    "address_complement": "Casa",
+    "neighborhood": "Bairro",
+    "city": "São Paulo",
+    "state": "SP",
+    "country": "Brasil",
+    "zip_code": "00000-000",
+    "latitude": -23.5505199,
+    "longitude": -46.6333094
+  },
+  "host_rating": 4.5,
+  "attendee_rating": 4.5,
+  "hosted_events": [
+    "b4fcf5b0-7f1f-4b0e-8c1e-1c5b6e1b7b2e",
+    "efg123b0-7f1f-4b0e-8c1e-1c5b6e1b7b2e",
+    "hij456b0-7f1f-4b0e-8c1e-1c5b6e1b7b2e"
+  ],
+  "attended_to": [
+    "b4fcf5b0-7f1f-4b0e-8c1e-1c5b6e1b7b2e",
+    "efg123b0-7f1f-4b0e-8c1e-1c5b6e1b7b2e",
+    "hij456b0-7f1f-4b0e-8c1e-1c5b6e1b7b2e"
+  ]
+}

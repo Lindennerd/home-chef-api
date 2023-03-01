@@ -1,0 +1,53 @@
+{
+  "id": "6b2b1b5e-8c5f-4b8b-8d5c-2c7f6d2f2d9d",
+  "location": {
+    "id": "6b2b1b5e-8c5f-4b8b-8d5c-2c7f6d2f2d9d",
+    "name": "John Doe",
+    "address": "Rua dos Bobos, 0",
+    "address_complement": "Casa",
+    "neighborhood": "Bairro",
+    "city": "São Paulo",
+    "state": "SP",
+    "country": "Brasil",
+    "zip_code": "00000-000",
+    "latitude": -23.5505199,
+    "longitude": -46.6333094
+  },
+  "scheduled_at": "2019-01-01T00:00:00.000Z",
+  "duration_in_hours": 1,
+  "status": "confirmed",
+  "max_guests": 3,
+  "rating": 0,
+  "host_user": {
+    "id": "6b2b1b5e-8c5f-4b8b-8d5c-2c7f6d2f2d9d",
+    "name": "John Doe",
+    "email": "john.doe@gmail.com",
+    "phone": "+55 11 99999-9999"
+  },
+  "guest_users": [
+    {
+      "id": "6b2b1b5e-8c5f-4b8b-8d5c-2c7f6d2f2d9d",
+      "name": "John Doe",
+      "email": "john.doe@gmail.com",
+      "phone": "+55 11 99999-9999",
+      "confirmation_code": "123456",
+      "confirmed_at": "2019-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "6b2b1b5e-8c5f-4b8b-8d5c-2c7f6d2f2d9d",
+      "name": "John Doe",
+      "email": "john.doe@gmail.com",
+      "phone": "+55 11 99999-9999",
+      "confirmation_code": "123456",
+      "confirmed_at": "2019-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "6b2b1b5e-8c5f-4b8b-8d5c-2c7f6d2f2d9d",
+      "name": "John Doe",
+      "email": "john.doe@gmail.com",
+      "phone": "+55 11 99999-9999",
+      "confirmation_code": "123456",
+      "confirmed_at": "2019-01-01T00:00:00.000Z"
+    }
+  ]
+}
