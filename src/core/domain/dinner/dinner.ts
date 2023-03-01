@@ -10,13 +10,17 @@ export enum DinnerStatus {
 export class Dinner<TId> extends AggregateRoot implements IEntity<TId> {
   constructor(
     readonly id: TId,
-    readonly scheduled_at: Date,
-    readonly duration_in_hours: number,
-    readonly status: DinnerStatus,
-    readonly max_guests: number,
-    readonly rating: number,
-    readonly location_id: TId,
+    protected scheduled_at: Date,
+    protected duration_in_hours: number,
+    protected status: DinnerStatus,
+    protected max_guests: number,
+    protected rating: number,
+    protected location_id: TId,
   ) {
     super();
+  }
+
+  public confirm() {
+    this.status = DinnerStatus.CONFIRMED;
   }
 }
