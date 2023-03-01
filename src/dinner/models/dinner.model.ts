@@ -48,6 +48,10 @@ export class DinnerModel extends Model<
   @Column({ allowNull: false })
   title: string;
 
+  @ForeignKey(() => UserModel)
+  @Column({ allowNull: false })
+  host_id: string;
+
   @BelongsTo(() => UserModel)
   host: UserModel;
 
