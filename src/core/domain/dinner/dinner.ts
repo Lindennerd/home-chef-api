@@ -15,6 +15,8 @@ export enum DinnerStatus {
 export class Dinner<TId> extends AggregateRoot implements IEntity<TId> {
   constructor(
     readonly id: TId,
+    protected title: string,
+    protected description: string,
     protected scheduled_at: Date,
     protected duration_in_hours: number,
     protected status: DinnerStatus,
