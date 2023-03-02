@@ -3,8 +3,7 @@ import { IEntity } from 'src/core/base/entity.interface';
 export abstract class Address<TId> implements IEntity<TId> {
   constructor(
     readonly id: TId,
-    protected name: string,
-    protected address: string,
+    protected street: string,
     protected neighborhood: string,
     protected city: string,
     protected state: string,

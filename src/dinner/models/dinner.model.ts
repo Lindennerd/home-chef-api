@@ -9,6 +9,8 @@ import {
 import { Dinner } from 'src/core/domain';
 import { UserModel } from 'src/user/models/user.model';
 import { DinnerStatus } from '../../core/domain/dinner/dinner';
+import { DinnerGuestsModel } from './dinner-guests.model';
+import { DinnerLocationModel } from './dinner-location.model';
 
 @Table({ tableName: 'dinner', timestamps: true })
 export class DinnerModel extends Model<
@@ -42,9 +44,6 @@ export class DinnerModel extends Model<
   rating: number;
 
   @Column({ allowNull: false })
-  location_id: string;
-
-  @Column({ allowNull: false })
   title: string;
 
   @ForeignKey(() => UserModel)
@@ -54,28 +53,13 @@ export class DinnerModel extends Model<
   @BelongsTo(() => UserModel)
   host: UserModel;
 
+  @ForeignKey(() => DinnerLocationModel)
+  @Column({ allowNull: false })
+  location_id: number;
+
+  @BelongsTo(() => DinnerLocationModel)
+  location: DinnerLocationModel;
+
   @BelongsToMany(() => UserModel, () => DinnerGuestsModel)
   guests: UserModel[];
-}
-
-@Table({ tableName: 'dinner_guests', timestamps: true })
-export class DinnerGuestsModel extends Model {
-  @Column({
-    allowNull: false,
-    primaryKey: true,
-    autoIncrement: true,
-    autoIncrementIdentity: true,
-  })
-  id: number;
-
-  @ForeignKey(() => DinnerModel)
-  @Column({ allowNull: false })
-  dinner_id: number;
-
-  @ForeignKey(() => UserModel)
-  @Column({ allowNull: false })
-  user_id: number;
-
-  @Column({ allowNull: false, defaultValue: false })
-  confirmed_attendance: boolean;
 }
