@@ -1,31 +1,32 @@
-import * as sequelize from 'sequelize';
 import {
   BelongsToMany,
   Column,
   HasMany,
+  HasOne,
   Model,
   Table,
 } from 'sequelize-typescript';
 import { User } from 'src/core/domain/user/user';
+import { AccountModel } from '../../auth/models/auth.model';
 import {
   DinnerGuestsModel,
   DinnerModel,
 } from '../../dinner/models/dinner.model';
 
 @Table({ tableName: 'user', timestamps: true })
-export class UserModel extends Model<User<string>, Omit<User<string>, 'id'>> {
+export class UserModel extends Model<User<number>, Omit<User<number>, 'id'>> {
   @Column({
     allowNull: false,
     primaryKey: true,
-    type: 'uuid',
-    defaultValue: sequelize.DataTypes.UUIDV4,
+    autoIncrement: true,
+    autoIncrementIdentity: true,
   })
-  id: string;
+  id: number;
 
   @Column({ allowNull: false })
   name: string;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: false, unique: true })
   email: string;
 
   @Column({ allowNull: false })
@@ -48,4 +49,7 @@ export class UserModel extends Model<User<string>, Omit<User<string>, 'id'>> {
 
   @BelongsToMany(() => DinnerModel, () => DinnerGuestsModel)
   attended_events: DinnerModel[];
+
+  @HasOne(() => AccountModel)
+  account: AccountModel;
 }

@@ -1,4 +1,3 @@
-import * as sequelize from 'sequelize';
 import {
   BelongsTo,
   BelongsToMany,
@@ -13,16 +12,16 @@ import { DinnerStatus } from '../../core/domain/dinner/dinner';
 
 @Table({ tableName: 'dinner', timestamps: true })
 export class DinnerModel extends Model<
-  Dinner<string>,
-  Omit<Dinner<string>, 'id'>
+  Dinner<number>,
+  Omit<Dinner<number>, 'id'>
 > {
   @Column({
     allowNull: false,
     primaryKey: true,
-    type: 'uuid',
-    defaultValue: sequelize.DataTypes.UUIDV4,
+    autoIncrement: true,
+    autoIncrementIdentity: true,
   })
-  id: string;
+  id: number;
 
   @Column({ allowNull: false })
   description: string;
@@ -50,7 +49,7 @@ export class DinnerModel extends Model<
 
   @ForeignKey(() => UserModel)
   @Column({ allowNull: false })
-  host_id: string;
+  host_id: number;
 
   @BelongsTo(() => UserModel)
   host: UserModel;
@@ -64,18 +63,18 @@ export class DinnerGuestsModel extends Model {
   @Column({
     allowNull: false,
     primaryKey: true,
-    type: 'uuid',
-    defaultValue: sequelize.DataTypes.UUIDV4,
+    autoIncrement: true,
+    autoIncrementIdentity: true,
   })
-  id: string;
+  id: number;
 
   @ForeignKey(() => DinnerModel)
   @Column({ allowNull: false })
-  dinner_id: string;
+  dinner_id: number;
 
   @ForeignKey(() => UserModel)
   @Column({ allowNull: false })
-  user_id: string;
+  user_id: number;
 
   @Column({ allowNull: false, defaultValue: false })
   confirmed_attendance: boolean;
