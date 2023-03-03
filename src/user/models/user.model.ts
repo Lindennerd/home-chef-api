@@ -8,14 +8,13 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { User } from 'src/core/domain/user/user';
 import { DinnerGuestsModel } from 'src/dinner/models/dinner-guests.model';
-import { AccountModel } from '../../auth/models/auth.model';
+import { AccountModel } from 'src/user/models/account.model';
 import { DinnerModel } from '../../dinner/models/dinner.model';
 import { UserAddressModel } from './user-address.model';
 
 @Table({ tableName: 'user', timestamps: true })
-export class UserModel extends Model<User<number>, Omit<User<number>, 'id'>> {
+export class UserModel extends Model {
   @Column({
     allowNull: false,
     primaryKey: true,

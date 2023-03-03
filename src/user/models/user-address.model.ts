@@ -1,11 +1,7 @@
 import { Column, Model, Table } from 'sequelize-typescript';
-import { Address } from '../../core/domain/common/address';
 
 @Table({ tableName: 'user_address', timestamps: true })
-export class UserAddressModel extends Model<
-  Address<number>,
-  Omit<Address<number>, 'id'>
-> {
+export class UserAddressModel extends Model {
   @Column({
     allowNull: false,
     primaryKey: true,
@@ -30,7 +26,7 @@ export class UserAddressModel extends Model<
   zip: string;
 
   @Column({ allowNull: false })
-  country: string;
+  number: string;
 
   @Column({ allowNull: false })
   latitude: number;

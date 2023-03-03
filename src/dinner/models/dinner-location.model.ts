@@ -1,11 +1,7 @@
 import { Column, Model, Table } from 'sequelize-typescript';
-import { Address } from 'src/core/domain/common/address';
 
 @Table({ tableName: 'dinner_location', timestamps: true })
-export class DinnerLocationModel extends Model<
-  Address<number>,
-  Omit<Address<number>, 'id'>
-> {
+export class DinnerLocationModel extends Model {
   @Column({
     allowNull: false,
     primaryKey: true,

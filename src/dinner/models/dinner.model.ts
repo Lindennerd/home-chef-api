@@ -6,17 +6,19 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Dinner } from 'src/core/domain';
 import { UserModel } from 'src/user/models/user.model';
-import { DinnerStatus } from '../../core/domain/dinner/dinner';
 import { DinnerGuestsModel } from './dinner-guests.model';
 import { DinnerLocationModel } from './dinner-location.model';
 
+export enum DinnerStatus {
+  PENDING = 'PENDING',
+  CANCELED = 'CANCELED',
+  FINISHED = 'FINISHED',
+  CONFIRMED = 'CONFIRMED',
+}
+
 @Table({ tableName: 'dinner', timestamps: true })
-export class DinnerModel extends Model<
-  Dinner<number>,
-  Omit<Dinner<number>, 'id'>
-> {
+export class DinnerModel extends Model {
   @Column({
     allowNull: false,
     primaryKey: true,

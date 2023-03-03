@@ -26,6 +26,35 @@ export class AccountInformationDto {
   @IsNotEmpty()
   passwordConfirmation: string;
 }
+export class UserAddressDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  street: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  neighborhood: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  city: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  state: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  zip: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  number: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  latitude: number;
+  @ApiProperty()
+  @IsNotEmpty()
+  longitude: number;
+  @ApiProperty()
+  @IsNotEmpty()
+  address_complement: string;
+}
 
 export class UserInformationDto {
   @ApiProperty()
@@ -39,16 +68,21 @@ export class UserInformationDto {
   @ApiProperty()
   @IsPhoneNumber('BR', { message: 'Invalid phone number' })
   phone: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNotEmptyObject()
+  address: UserAddressDto;
 }
 
 export class UserRegistrationDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsNotEmptyObject()
-  accountInformation: AccountInformationDto;
+  account: AccountInformationDto;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsNotEmptyObject()
-  userInformation: UserInformationDto;
+  user: UserInformationDto;
 }

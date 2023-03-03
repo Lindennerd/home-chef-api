@@ -1,5 +1,3 @@
-import { QueryManyBase } from '../../common/query.base';
-
 export class UserByNameQuery {
   constructor(public readonly name: string) {}
 }
@@ -16,22 +14,18 @@ export class UserByIdQuery {
   constructor(public readonly id: string) {}
 }
 
-export class UserHostedEventsQuery extends QueryManyBase {
+export class UserHostedEventsQuery {
   constructor(
     public page: number,
     public pageSize: number,
     public readonly id: string,
-  ) {
-    super(page, pageSize);
-  }
+  ) {}
 }
 
-export class UserAttendedEventsQuery extends QueryManyBase {
+export class UserAttendedEventsQuery {
   constructor(
     public page: number,
     public pageSize: number,
     public readonly id: string,
-  ) {
-    super(page, pageSize);
-  }
+  ) {}
 }

@@ -11,7 +11,7 @@ export interface IAccount {
   id: string;
   username: string;
   password: string;
-  user_id: string;
+  user_id: number;
 }
 
 @Table({ tableName: 'account', timestamps: true })
