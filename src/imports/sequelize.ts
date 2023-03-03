@@ -16,7 +16,7 @@ export const Sequelize = SequelizeModule.forRootAsync({
     host: configService.getOrThrow('DATABASE_HOST'),
     username: configService.getOrThrow('DATABASE_USERNAME'),
     password: configService.getOrThrow('DATABASE_PWD'),
-    database: configService.getOrThrow('DATABASE_NAME'),
+    database: configService.getOrThrow('DATABASE_DBNAME'),
     synchronize: process.env.NODE_ENV === 'development' ? true : false,
     autoLoadModels: true,
   }),
