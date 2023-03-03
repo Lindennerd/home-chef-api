@@ -3,6 +3,12 @@ on:
   push:
     branches:
       - master
+env:
+  DATABASE_HOST: ${{ secrets.HC_DATABASE_HOST }}
+  DATABASE_NAME: ${{ secrets.HC_DATABASE_NAME }}
+  DATABASE_USERNAME: ${{ secrets.HC_DATABASE_USERNAME }}
+  DATABASE_PWD: ${{ secrets.HC_DATABASE_PWD }}
+  JWT_SECRET: ${{ secrets.HC_JWT_SECRET }}
 jobs:
   deploy:
     name: Deploy app
