@@ -33,6 +33,13 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
 
   async execute(command: CreateUserCommand): Promise<UserModel> {
     try {
+      const existingAccount = await this.accountModel.findOne({
+        where: { username: command.username },
+      });
+      if (existingAccount) {
+        throw new Error('Username already exists');
+      }
+
       await this.transaction.runTransaction(async (transaction) => {
         const address = await this.userAddressModel.create(
           {

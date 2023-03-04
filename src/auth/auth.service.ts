@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { GetUserByUserNameQuery } from 'src/user/use-cases/get-user/user-by-username';
+import { GetAccountByUserNameQuery } from 'src/user/use-cases/get-account/account-by-username';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +14,7 @@ export class AuthService {
 
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.queryBus.execute(
-      new GetUserByUserNameQuery(username),
+      new GetAccountByUserNameQuery(username),
     );
 
     if (user && (await bcrypt.compare(pass, user.password))) {
