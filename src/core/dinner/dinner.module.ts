@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Commands } from 'src/core/dinner/use-cases';
 import { AuthModule } from '../../auth/auth.module';
 import { UserModule } from '../../user/user.module';
+import { DinnerNotificationsProvider } from './dinner-notifications.provider';
 import { DinnerController } from './dinner.controller';
 import { DinnerMappingProfile } from './map/dinner.mappings';
 import { DinnerGuestsModel } from './models/dinner-guests.model';
@@ -18,23 +17,6 @@ import { DinnerModel } from './models/dinner.model';
     CqrsModule,
     AuthModule,
     UserModule,
-    ClientsModule.registerAsync([
-      {
-        name: 'DINNER_NOTIFICATION_SERVICE',
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          urls: [configService.getOrThrow('RABBITMQ_HOST')],
-          options: {
-            queue: 'dinner_notifications',
-            queueOptions: {
-              durable: true,
-            },
-          },
-        }),
-      },
-    ]),
     SequelizeModule.forFeature([
       DinnerModel,
       DinnerGuestsModel,
@@ -42,7 +24,7 @@ import { DinnerModel } from './models/dinner.model';
       DinnerNotificationsModel,
     ]),
   ],
-  providers: [...Commands, DinnerMappingProfile],
+  providers: [...Commands, DinnerMappingProfile, DinnerNotificationsProvider],
   controllers: [DinnerController],
 })
 export class DinnerModule {}
