@@ -4,12 +4,12 @@ import { BadRequestException, Logger } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
 import { TransactionRunner } from '../../../transaction/transaction-runner';
-import { DinnerAggregate } from '../dinner.aggregate';
-import { DinnerGuestsModel } from '../models/dinner-guests.model';
-import { DinnerModel } from '../models/dinner.model';
+import { DinnerAggregate } from '../../dinner/dinner.aggregate';
+import { DinnerGuestsModel } from '../../dinner/models/dinner-guests.model';
+import { DinnerModel } from '../../dinner/models/dinner.model';
 
 export class AttendToDinnerCommand {
-  constructor(public readonly dinner_id: string, public readonly guest_id) {}
+  constructor(public readonly dinner_id: number, public readonly guest_id) {}
 }
 
 @CommandHandler(AttendToDinnerCommand)
@@ -28,6 +28,8 @@ export class AttendToDinnerHandler
   private logger = new Logger(AttendToDinnerHandler.name);
 
   async execute(command: AttendToDinnerCommand) {
+    console.debug('AttendToDinnerCommand', command);
+
     const dinner = await this.dinnerModel.findOne({
       where: {
         id: command.dinner_id,
@@ -48,7 +50,7 @@ export class AttendToDinnerHandler
     }
 
     if (dinner.host_id === command.guest_id) {
-      //throw new BadRequestException('You are the host of this dinner');
+      throw new BadRequestException('You are the host of this dinner');
     }
 
     dinner.guests.push(command.guest_id);

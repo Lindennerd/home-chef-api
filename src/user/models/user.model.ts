@@ -8,9 +8,9 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { DinnerGuestsModel } from 'src/dinner/models/dinner-guests.model';
+import { DinnerGuestsModel } from 'src/core/dinner/models/dinner-guests.model';
 import { AccountModel } from 'src/user/models/account.model';
-import { DinnerModel } from '../../dinner/models/dinner.model';
+import { DinnerModel } from '../../core/dinner/models/dinner.model';
 import { UserAddressModel } from './user-address.model';
 
 @Table({ tableName: 'user', timestamps: true })
