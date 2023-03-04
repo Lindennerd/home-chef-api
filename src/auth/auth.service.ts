@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { GetAccountByUserNameQuery } from 'src/user/use-cases/get-account/account-by-username';
+import { GetAccountByUserNameQuery } from 'src/user/use-cases/queries/account-by-username';
 
 @Injectable()
 export class AuthService {
@@ -24,8 +24,8 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+  async login(account: any) {
+    const payload = { username: account.username, sub: account.id };
     return {
       access_token: this.jwtService.sign(payload),
     };

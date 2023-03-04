@@ -14,6 +14,9 @@ export class DinnerLocationModel extends Model {
   street: string;
 
   @Column({ allowNull: false })
+  number: string;
+
+  @Column({ allowNull: false })
   neighborhood: string;
 
   @Column({ allowNull: false })
@@ -24,9 +27,6 @@ export class DinnerLocationModel extends Model {
 
   @Column({ allowNull: false })
   zip: string;
-
-  @Column({ allowNull: false })
-  country: string;
 
   @Column({ allowNull: false })
   latitude: number;

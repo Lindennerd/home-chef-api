@@ -36,13 +36,17 @@ export class DinnerModel extends Model {
   @Column({ allowNull: false })
   duration_in_hours: number;
 
-  @Column({ allowNull: false, values: Object.values(DinnerStatus) })
+  @Column({
+    allowNull: false,
+    values: Object.values(DinnerStatus),
+    defaultValue: DinnerStatus.PENDING,
+  })
   status: string;
 
   @Column({ allowNull: false })
   max_guests: number;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: false, defaultValue: 0 })
   rating: number;
 
   @Column({ allowNull: false })

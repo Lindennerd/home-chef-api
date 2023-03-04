@@ -2,14 +2,15 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { CreateUserCommand } from 'src/user/use-cases/register-user/create-user';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { CreateUserCommand } from 'src/user/use-cases/create-user';
 import { AuthService } from './auth.service';
 import { UserRegistrationDto } from './dto/user-registration.dto';
 
@@ -55,5 +56,12 @@ export class AuthController {
   @Post('login')
   async login(@Request() req: any): Promise<{ access_token: string }> {
     return this.authService.login(req.user);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @Get('profile')
+  async profile(@Request() req) {
+    return req.user;
   }
 }
