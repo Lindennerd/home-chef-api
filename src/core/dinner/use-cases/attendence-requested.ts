@@ -1,5 +1,6 @@
-import { Logger } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/sequelize';
 import { AccountModel } from '../../../user/models/account.model';
 import { DinnerAggregate } from '../dinner.aggregate';
@@ -20,6 +21,7 @@ export class AttendenceRequestedHandler
     @InjectModel(DinnerModel) private readonly dinnerModel: typeof DinnerModel,
     @InjectModel(AccountModel)
     private readonly accountModel: typeof AccountModel,
+    @Inject('DINNER_NOTIFICATION_SERVICE') private readonly client: ClientProxy,
   ) {}
 
   private logger = new Logger(AttendenceRequestedHandler.name);
@@ -32,6 +34,11 @@ export class AttendenceRequestedHandler
     const guest = await this.accountModel.findOne({
       where: { id: guest_id },
       include: [AccountModel.associations.user],
+    });
+
+    this.client.emit('attendence_requested', {
+      dinner: dinner.id,
+      guest: guest.id,
     });
   }
 }
