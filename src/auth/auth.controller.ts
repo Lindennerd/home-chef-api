@@ -10,7 +10,7 @@ import {
 import { CommandBus } from '@nestjs/cqrs';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { CreateUserCommand } from 'src/user/use-cases/register-user/create-user';
+import { CreateUserCommand } from 'src/user/use-cases/create-user';
 import { AuthService } from './auth.service';
 import { UserRegistrationDto } from './dto/user-registration.dto';
 

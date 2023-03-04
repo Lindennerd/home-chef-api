@@ -9,8 +9,6 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
 
-  console.log(process.env.NODE_ENV);
-
   const config = new DocumentBuilder()
     .setTitle('Home Chef API')
     .setDescription('The Home Chef API description')
