@@ -1,8 +1,8 @@
 import { AggregateRoot } from '@nestjs/cqrs';
-import { AttendenceUpdated } from './use-cases/attendence-updated';
+import { AttendenceRequested } from './use-cases/attendence-requested';
 export class DinnerAggregate extends AggregateRoot {
   constructor(
-    public readonly id: string,
+    public readonly id: number,
     public readonly title: string,
     public readonly description: string,
     public readonly scheduled_for: Date,
@@ -25,6 +25,6 @@ export class DinnerAggregate extends AggregateRoot {
   }
 
   public async attendanceUpdated(guest_id: string) {
-    this.apply(new AttendenceUpdated(this.id, guest_id));
+    this.apply(new AttendenceRequested(this, guest_id));
   }
 }

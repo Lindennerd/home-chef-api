@@ -1,10 +1,8 @@
-import { Mapper } from '@automapper/core';
-import { InjectMapper } from '@automapper/nestjs';
 import { BadRequestException, Logger } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
+import { DinnerMappingProfile } from 'src/core/dinner/map/dinner.mappings';
 import { TransactionRunner } from '../../../transaction/transaction-runner';
-import { DinnerAggregate } from '../../dinner/dinner.aggregate';
 import { DinnerGuestsModel } from '../../dinner/models/dinner-guests.model';
 import { DinnerModel } from '../../dinner/models/dinner.model';
 
@@ -19,7 +17,7 @@ export class AttendToDinnerHandler
   constructor(
     private readonly transaction: TransactionRunner,
     private readonly eventPublisher: EventPublisher,
-    @InjectMapper() private readonly mapper: Mapper,
+    private readonly mapper: DinnerMappingProfile,
     @InjectModel(DinnerModel) private readonly dinnerModel: typeof DinnerModel,
     @InjectModel(DinnerGuestsModel)
     private readonly dinnerGuestsModel: typeof DinnerGuestsModel,
@@ -28,8 +26,6 @@ export class AttendToDinnerHandler
   private logger = new Logger(AttendToDinnerHandler.name);
 
   async execute(command: AttendToDinnerCommand) {
-    console.debug('AttendToDinnerCommand', command);
-
     const dinner = await this.dinnerModel.findOne({
       where: {
         id: command.dinner_id,
@@ -50,7 +46,7 @@ export class AttendToDinnerHandler
     }
 
     if (dinner.host_id === command.guest_id) {
-      throw new BadRequestException('You are the host of this dinner');
+      //throw new BadRequestException('You are the host of this dinner');
     }
 
     dinner.guests.push(command.guest_id);
@@ -66,7 +62,7 @@ export class AttendToDinnerHandler
     });
 
     const dinnerEvent = this.eventPublisher.mergeObjectContext(
-      this.mapper.map(dinner, DinnerModel, DinnerAggregate),
+      this.mapper.map(dinner),
     );
 
     dinnerEvent.attendanceUpdated(command.guest_id);
