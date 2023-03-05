@@ -26,5 +26,6 @@ import { DinnerModel } from './models/dinner.model';
   ],
   providers: [...Commands, DinnerMappingProfile, DinnerNotificationsProvider],
   controllers: [DinnerController],
+  exports: [SequelizeModule, DinnerMappingProfile],
 })
 export class DinnerModule {}

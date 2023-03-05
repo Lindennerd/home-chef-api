@@ -46,7 +46,7 @@ export class AttendToDinnerHandler
     }
 
     if (dinner.host_id === command.guest_id) {
-      //throw new BadRequestException('You are the host of this dinner');
+      throw new BadRequestException('You are the host of this dinner');
     }
 
     dinner.guests.push(command.guest_id);

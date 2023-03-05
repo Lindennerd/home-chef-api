@@ -2,6 +2,7 @@ import { classes } from '@automapper/classes';
 import { AutomapperModule } from '@automapper/nestjs';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DinnerModule } from './core/dinner/dinner.module';
@@ -14,6 +15,7 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    TransactionModule,
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),
@@ -21,11 +23,10 @@ import { UserModule } from './user/user.module';
     DinnerModule,
     UserModule,
     AuthModule,
-    TransactionModule,
     HostModule,
     GuestModule,
   ],
   controllers: [AppController],
-  exports: [],
+  exports: [SequelizeModule],
 })
 export class AppModule {}
