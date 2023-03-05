@@ -6,12 +6,11 @@ import { Sequelize } from 'sequelize-typescript';
 export class TransactionRunner {
   constructor(private sequelize: Sequelize) {}
   async runTransaction(autoCallback: (t: Transaction) => PromiseLike<void>) {
-    const t = await this.sequelize.transaction();
     try {
-      await autoCallback(t);
-      await t.commit();
+      return await this.sequelize.transaction(async (t: Transaction) => {
+        return await autoCallback(t);
+      });
     } catch (error) {
-      await t.rollback();
       throw error;
     }
   }

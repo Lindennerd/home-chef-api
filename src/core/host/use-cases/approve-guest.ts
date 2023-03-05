@@ -5,7 +5,6 @@ import { Sequelize } from 'sequelize-typescript';
 import { DinnerModel } from 'src/core/dinner/models/dinner.model';
 import { TransactionRunner } from '../../../transaction/transaction-runner';
 import { DinnerGuestsModel } from '../../dinner/models/dinner-guests.model';
-import { HostApprovedAttendence } from '../../dinner/use-cases/host-approved-attendence';
 
 export class ApproveGuestCommand {
   constructor(
@@ -39,28 +38,24 @@ export class ApproveGuestCommandHandler
       );
     }
 
-    const t = await this.sequelize.transaction();
     try {
-      await this.dinnerGuests.update(
-        {
-          confirmed_attendance: true,
-        },
-        {
-          where: {
-            user_id: command.guest_id,
-            dinner_id: command.guest_id,
+      return await this.transactionRunner.runTransaction(async (t) => {
+        await this.dinnerGuests.update(
+          {
+            confirmed_attendance: true,
           },
-          transaction: t,
-        },
-      );
-
-      await t.commit();
+          {
+            where: {
+              user_id: command.guest_id,
+              dinner_id: command.guest_id,
+            },
+            transaction: t,
+          },
+        );
+      });
     } catch (e) {
       this.logger.error(`Error while approving attendance`, e.stack, e);
-      t.rollback();
       throw e;
     }
-
-    this.eventBus.publish(new HostApprovedAttendence(command.dinner_id));
   }
 }
