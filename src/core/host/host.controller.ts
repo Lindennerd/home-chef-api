@@ -10,8 +10,11 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { DinnerStatus } from '../dinner/models/dinner.model';
+import { AlterDinnerStatusDto } from './dto/alter-dinner-status.dto';
 import { MyDinnersDto } from './dto/my-dinners.dto';
 import { NewDinnerDto } from './dto/new-dinner.dto';
+import { AlterDinnerStatusCommand } from './use-cases';
 import { NewDinner } from './use-cases/create-dinner';
 import { MyDinnersAsHostQuery } from './use-cases/queries/my-dinners';
 
@@ -37,6 +40,22 @@ export class HostController {
         dinnerDto.max_guests,
         req.user.userId,
         dinnerDto.location,
+      ),
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @Post('update-dinner-status')
+  async alterStatus(
+    @Body() alterStatusDto: AlterDinnerStatusDto,
+    @Request() req: any,
+  ) {
+    return await this.commandBus.execute(
+      new AlterDinnerStatusCommand(
+        alterStatusDto.dinner_id,
+        req.user.userId,
+        alterStatusDto.status as DinnerStatus,
       ),
     );
   }

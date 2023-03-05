@@ -4,11 +4,19 @@ import { AuthModule } from '../../auth/auth.module';
 import { UserModule } from '../../user/user.module';
 import { DinnerModule } from '../dinner/dinner.module';
 import { HostController } from './host.controller';
-import { useCases } from './use-cases/index';
+import {
+  AlterDinnerStatusCommandHandler,
+  MyDinnersAsHostQueryHandler,
+  NewDinnerHandler,
+} from './use-cases';
 
 @Module({
   imports: [AuthModule, CqrsModule, DinnerModule, UserModule],
-  providers: [...useCases],
+  providers: [
+    NewDinnerHandler,
+    MyDinnersAsHostQueryHandler,
+    AlterDinnerStatusCommandHandler,
+  ],
   controllers: [HostController],
 })
 export class HostModule {}
