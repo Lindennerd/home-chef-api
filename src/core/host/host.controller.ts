@@ -1,15 +1,28 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { MyDinnersDto } from './dto/my-dinners.dto';
 import { NewDinnerDto } from './dto/new-dinner.dto';
 import { NewDinner } from './use-cases/create-dinner';
+import { MyDinnersQuery } from './use-cases/queries/my-dinners';
 
 @ApiBearerAuth()
 @ApiTags('Host')
 @Controller('host')
 export class HostController {
-  constructor(private readonly commandBus: CommandBus) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) {}
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
@@ -24,6 +37,20 @@ export class HostController {
         dinnerDto.max_guests,
         req.user.userId,
         dinnerDto.location,
+      ),
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @Get('my-dinners')
+  async myDinners(@Request() req: any, @Query() myDinnersQuery: MyDinnersDto) {
+    return await this.queryBus.execute(
+      new MyDinnersQuery(
+        myDinnersQuery.page,
+        myDinnersQuery.limit,
+        myDinnersQuery.filter,
+        req.user.userId,
       ),
     );
   }
