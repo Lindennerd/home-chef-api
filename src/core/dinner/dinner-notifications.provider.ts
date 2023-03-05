@@ -1,6 +1,10 @@
 import { Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+import {
+  ClientProxyFactory,
+  RmqOptions,
+  Transport,
+} from '@nestjs/microservices';
 
 export const DinnerNotificationsProvider = {
   provide: 'DINNER_NOTIFICATION_SERVICE',
@@ -10,12 +14,13 @@ export const DinnerNotificationsProvider = {
     return ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
-        urls: [configService.getOrThrow('RABBITMQ_HOST')],
+        urls: [configService.getOrThrow<string>('RABBITMQ_HOST')],
+        noAck: false,
         queue: 'dinner_notifications',
         queueOptions: {
           durable: true,
         },
       },
-    });
+    } satisfies RmqOptions);
   },
 } satisfies Provider;
