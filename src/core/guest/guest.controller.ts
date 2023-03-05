@@ -12,6 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { MyDinnersDto } from './dto/my-dinners.dto';
 import { AttendToDinnerCommand } from './use-cases/attend-dinner';
+import { CancelAttendenceCommand } from './use-cases/cancel-attendence';
 import { MyDinnersAsGuestQuery } from './use-cases/queries/my-dinners';
 
 @ApiTags('Guest')
@@ -32,6 +33,19 @@ export class GuestController {
   ) {
     return this.commandBus.execute(
       new AttendToDinnerCommand(dinnerId, req.user.userId),
+    );
+  }
+
+  @ApiBearerAuth()
+  @ApiParam({ name: 'dinnerId', type: 'number' })
+  @UseGuards(AuthGuard('jwt'))
+  @Post('cancel-attendence/:dinnerId')
+  async cancelAttendence(
+    @Request() req: any,
+    @Param('dinnerId') dinnerId: number,
+  ) {
+    return this.commandBus.execute(
+      new CancelAttendenceCommand(dinnerId, req.user.userId),
     );
   }
 
