@@ -2,8 +2,9 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 import { DinnerModel } from 'src/core/dinner/models/dinner.model';
+import { UserModel } from '../../../../user/models/user.model';
 
-export class MyDinnersAsHostQuery {
+export class MyDinnersAsGuestQuery {
   constructor(
     public readonly page: number,
     public readonly limit: number,
@@ -12,20 +13,19 @@ export class MyDinnersAsHostQuery {
   ) {}
 }
 
-@QueryHandler(MyDinnersAsHostQuery)
-export class MyDinnersAsHostQueryHandler
-  implements IQueryHandler<MyDinnersAsHostQuery, DinnerModel[]>
+@QueryHandler(MyDinnersAsGuestQuery)
+export class MyDinnersAsGuestQueryHandler
+  implements IQueryHandler<MyDinnersAsGuestQuery, DinnerModel[]>
 {
   constructor(
     @InjectModel(DinnerModel) private dinnerModel: typeof DinnerModel,
   ) {}
 
-  execute(query: MyDinnersAsHostQuery): Promise<DinnerModel[]> {
+  execute(query: MyDinnersAsGuestQuery): Promise<DinnerModel[]> {
     const { page, limit, filter } = query;
     const offset = (page - 1) * limit;
     return this.dinnerModel.findAll({
       where: {
-        host_id: query.user_id,
         [Op.or]: {
           title: { [Op.like]: `%${filter ?? ''}%` },
           description: { [Op.like]: `%${filter ?? ''}%` },
@@ -34,8 +34,9 @@ export class MyDinnersAsHostQueryHandler
       offset,
       limit,
       include: [
+        DinnerModel.associations.host,
         DinnerModel.associations.location,
-        DinnerModel.associations.guests,
+        { model: UserModel, as: 'guests', where: { id: query.user_id } },
       ],
     });
   }
