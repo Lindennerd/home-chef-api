@@ -6,6 +6,7 @@ import { DinnerModule } from '../dinner/dinner.module';
 import { HostController } from './host.controller';
 import {
   AlterDinnerStatusCommandHandler,
+  ApproveGuestCommandHandler,
   MyDinnersAsHostQueryHandler,
   NewDinnerHandler,
 } from './use-cases';
@@ -16,6 +17,7 @@ import {
     NewDinnerHandler,
     MyDinnersAsHostQueryHandler,
     AlterDinnerStatusCommandHandler,
+    ApproveGuestCommandHandler,
   ],
   controllers: [HostController],
 })

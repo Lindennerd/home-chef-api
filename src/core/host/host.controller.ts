@@ -12,9 +12,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { DinnerStatus } from '../dinner/models/dinner.model';
 import { AlterDinnerStatusDto } from './dto/alter-dinner-status.dto';
+import { ApproveGuestDto } from './dto/approve-guest.dto';
 import { MyDinnersDto } from './dto/my-dinners.dto';
 import { NewDinnerDto } from './dto/new-dinner.dto';
 import { AlterDinnerStatusCommand } from './use-cases';
+import { ApproveGuestCommand } from './use-cases/approve-guest';
 import { NewDinner } from './use-cases/create-dinner';
 import { MyDinnersAsHostQuery } from './use-cases/queries/my-dinners';
 
@@ -56,6 +58,22 @@ export class HostController {
         alterStatusDto.dinner_id,
         req.user.userId,
         alterStatusDto.status as DinnerStatus,
+      ),
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @Post('approve-guest')
+  async approveGuest(
+    @Request() req: any,
+    @Body() approveGuest: ApproveGuestDto,
+  ) {
+    return await this.commandBus.execute(
+      new ApproveGuestCommand(
+        approveGuest.guest_id,
+        approveGuest.dinner_id,
+        req.user.userId,
       ),
     );
   }
