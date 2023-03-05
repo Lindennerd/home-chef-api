@@ -4,7 +4,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
-import { DinnerModule } from './dinner/dinner.module';
+import { DinnerModule } from './core/dinner/dinner.module';
+import { GuestModule } from './core/guest/guest.module';
+import { HostModule } from './core/host/host.module';
 import { Sequelize } from './imports/sequelize';
 import { TransactionModule } from './transaction/transaction.module';
 import { UserModule } from './user/user.module';
@@ -20,6 +22,8 @@ import { UserModule } from './user/user.module';
     UserModule,
     AuthModule,
     TransactionModule,
+    HostModule,
+    GuestModule,
   ],
   controllers: [AppController],
   exports: [],

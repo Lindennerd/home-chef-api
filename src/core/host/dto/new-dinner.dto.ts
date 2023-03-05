@@ -31,7 +31,7 @@ export class DinnerLocationDto {
   address_complement: string;
 }
 
-export class CreateDinnerDto {
+export class NewDinnerDto {
   @ApiProperty()
   @IsNotEmpty()
   title: string;

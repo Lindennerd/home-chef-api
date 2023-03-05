@@ -60,6 +60,13 @@ export class AuthController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
+  @Post('logout')
+  async logout(@Request() req) {
+    return req.res.setHeader('Authorization', null);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   @Get('profile')
   async profile(@Request() req) {
     return req.user;

@@ -1,11 +1,11 @@
 import { BadRequestException, Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { DinnerLocationModel } from 'src/dinner/models/dinner-location.model';
-import { TransactionRunner } from '../../transaction/transaction-runner';
-import { DinnerModel } from '../models/dinner.model';
+import { DinnerLocationModel } from 'src/core/dinner/models/dinner-location.model';
+import { TransactionRunner } from '../../../transaction/transaction-runner';
+import { DinnerModel } from '../../dinner/models/dinner.model';
 
-export class CreateDinnerCommand {
+export class NewDinner {
   constructor(
     public readonly title: string,
     public readonly description: string,
@@ -27,10 +27,8 @@ export class CreateDinnerCommand {
   ) {}
 }
 
-@CommandHandler(CreateDinnerCommand)
-export class CreateDinnerHandler
-  implements ICommandHandler<CreateDinnerCommand>
-{
+@CommandHandler(NewDinner)
+export class NewDinnerHandler implements ICommandHandler<NewDinner> {
   constructor(
     private transaction: TransactionRunner,
     @InjectModel(DinnerModel) private dinnerModel: typeof DinnerModel,
@@ -38,9 +36,9 @@ export class CreateDinnerHandler
     private dinnerLocationModel: typeof DinnerLocationModel,
   ) {}
 
-  private logger = new Logger(CreateDinnerHandler.name);
+  private logger = new Logger(NewDinner.name);
 
-  async execute(command: CreateDinnerCommand) {
+  async execute(command: NewDinner) {
     this.logger.debug(
       `Creating a dinner ${command.title} for the host ${command.host_id}`,
     );
@@ -72,7 +70,6 @@ export class CreateDinnerHandler
           { ...command.location },
           { transaction },
         );
-        console.debug('command', command);
         await this.dinnerModel.create(
           {
             ...command,
