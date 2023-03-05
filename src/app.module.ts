@@ -15,6 +15,7 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    TransactionModule,
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),
@@ -22,7 +23,6 @@ import { UserModule } from './user/user.module';
     DinnerModule,
     UserModule,
     AuthModule,
-    TransactionModule,
     HostModule,
     GuestModule,
   ],

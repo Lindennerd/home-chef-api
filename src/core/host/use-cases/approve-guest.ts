@@ -1,9 +1,12 @@
-import { BadRequestException } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { BadRequestException, Logger } from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import { DinnerModel } from 'src/core/dinner/models/dinner.model';
 import { TransactionRunner } from '../../../transaction/transaction-runner';
 import { DinnerGuestsModel } from '../../dinner/models/dinner-guests.model';
+import { HostApprovedAttendence } from '../../dinner/use-cases/host-approved-attendence';
+
 export class ApproveGuestCommand {
   constructor(
     public guest_id: number,
@@ -18,10 +21,14 @@ export class ApproveGuestCommandHandler
 {
   constructor(
     private transactionRunner: TransactionRunner,
+    private eventBus: EventBus,
+    private sequelize: Sequelize,
     @InjectModel(DinnerGuestsModel)
     private dinnerGuests: typeof DinnerGuestsModel,
     @InjectModel(DinnerModel) private dinnerModel: typeof DinnerModel,
   ) {}
+
+  private logger = new Logger(ApproveGuestCommand.name);
 
   async execute(command: ApproveGuestCommand): Promise<any> {
     const dinner = await this.dinnerModel.findByPk(command.dinner_id);
@@ -32,8 +39,9 @@ export class ApproveGuestCommandHandler
       );
     }
 
-    return this.transactionRunner.runTransaction(async (t) => {
-      this.dinnerGuests.update(
+    const t = await this.sequelize.transaction();
+    try {
+      await this.dinnerGuests.update(
         {
           confirmed_attendance: true,
         },
@@ -45,6 +53,14 @@ export class ApproveGuestCommandHandler
           transaction: t,
         },
       );
-    });
+
+      await t.commit();
+    } catch (e) {
+      this.logger.error(`Error while approving attendance`, e.stack, e);
+      t.rollback();
+      throw e;
+    }
+
+    this.eventBus.publish(new HostApprovedAttendence(command.dinner_id));
   }
 }
