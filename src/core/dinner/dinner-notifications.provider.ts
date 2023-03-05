@@ -10,7 +10,6 @@ export const DinnerNotificationsProvider = {
   provide: 'DINNER_NOTIFICATION_SERVICE',
   inject: [ConfigService],
   useFactory: (configService: ConfigService) => {
-    console.debug('config', configService);
     return ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {

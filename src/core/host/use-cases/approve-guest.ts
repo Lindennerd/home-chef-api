@@ -3,6 +3,7 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { DinnerModel } from 'src/core/dinner/models/dinner.model';
+import { HostApprovedAttendence } from 'src/core/dinner/use-cases/host-approved-attendence';
 import { TransactionRunner } from '../../../transaction/transaction-runner';
 import { DinnerGuestsModel } from '../../dinner/models/dinner-guests.model';
 
@@ -39,7 +40,7 @@ export class ApproveGuestCommandHandler
     }
 
     try {
-      return await this.transactionRunner.runTransaction(async (t) => {
+      await this.transactionRunner.runTransaction(async (t) => {
         await this.dinnerGuests.update(
           {
             confirmed_attendance: true,
@@ -57,5 +58,7 @@ export class ApproveGuestCommandHandler
       this.logger.error(`Error while approving attendance`, e.stack, e);
       throw e;
     }
+
+    this.eventBus.publish(new HostApprovedAttendence(command.dinner_id));
   }
 }
