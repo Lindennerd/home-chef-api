@@ -1,7 +1,16 @@
-import { Controller, Get, Logger, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Logger,
+  Param,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { GetAllDinnerDto } from './use-cases/dto/get-all-dinners.dto';
+import { GetDinnersQuery } from './use-cases/queries/get-all-dinners';
 import { GetDinnerQuery } from './use-cases/queries/get-dinner';
 
 @ApiTags('Dinner')
@@ -16,5 +25,18 @@ export class DinnerController {
   @Get(':dinnerId')
   async getDinner(@Param('dinnerId') dinnerId: number) {
     return await this.queryBus.execute(new GetDinnerQuery(dinnerId));
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  async getDinners(@Query() getAllDinners: GetAllDinnerDto) {
+    return await this.queryBus.execute(
+      new GetDinnersQuery(
+        getAllDinners.page,
+        getAllDinners.limit,
+        getAllDinners.filter,
+      ),
+    );
   }
 }
